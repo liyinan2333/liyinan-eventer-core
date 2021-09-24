@@ -3,10 +3,13 @@
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 
+    <name>leoli eventer core</name>
     <modelVersion>4.0.0</modelVersion>
     <groupId>io.github.leoli233</groupId>
     <artifactId>leoli-eventer-core</artifactId>
     <version>1.0.0-RELEASE</version>
+    <description>A solution of message communication between components in process.</description>
+    <url>https://github.com/leoli233/leoli-eventer-core</url>
     <build>
         <plugins>
             <plugin>
@@ -134,12 +137,12 @@
                 <snapshotRepository>
                     <id>sonatype-nexus-snapshots</id>
                     <name>Sonatype Nexus Snapshots</name>
-                    <url>https://oss.sonatype.org/content/repositories/snapshots/</url>
+                    <url>https://s01.oss.sonatype.org/content/repositories/snapshots/</url>
                 </snapshotRepository>
                 <repository>
                     <id>sonatype-nexus-staging</id>
                     <name>Nexus Release Repository</name>
-                    <url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</url>
+                    <url>https://s01.oss.sonatype.org/service/local/staging/deploy/maven2/</url>
                 </repository>
             </distributionManagement>
         </profile>
