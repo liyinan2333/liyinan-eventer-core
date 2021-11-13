@@ -11,7 +11,7 @@ import org.springframework.stereotype.Component;
 /**
  * Handle request event {@link PingEvent}.
  *
- * @author leoli
+ * @author LiYinan
  * @date 2020/2/26
  */
 @Async

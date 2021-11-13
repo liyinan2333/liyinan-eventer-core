@@ -17,7 +17,7 @@ import java.util.stream.Collectors;
 /**
  * Event Manager
  *
- * @author leoli
+ * @author LiYinan
  * @date 2020/2/26
  */
 public class EventManager {

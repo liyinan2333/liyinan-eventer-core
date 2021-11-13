@@ -9,7 +9,7 @@ import org.springframework.stereotype.Component;
 /**
  * Handle {@link SayEvent}.
  *
- * @author leoli
+ * @author LiYinan
  * @date 2020/2/26
  */
 @Component

@@ -11,34 +11,31 @@ import java.lang.reflect.Type;
 /**
  * Abstract event processor, subscribe to and process a specified event.
  *
- * @author leoli
+ * @author LiYinan
  * @date 2020/2/26
  */
 public abstract class EventHandler<T> {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(EventHandler.class);
-
     /**
      * If @Async annotation exists, it's processed asynchronously.
      */
-    private boolean async = false;
+    private boolean async;
+    private Router router;
+
+    public EventHandler() {
+        // When the object is initialized, register the event type to be received with the event manager.
+        EventManager.get().regist(this.getGenericClass(), this);
+        // Determine whether to process asynchronously during object initialization.
+        this.async = getClass().getAnnotation(Async.class) != null;
+        // Regist default router during object initialization.
+        this.router = registRouter();
+    }
+
     /**
      * Default match all.
      */
-    private Router router = event -> {
-        LOGGER.info("Default router matched.");
-        return true;
-    };
-
-    public EventHandler() {
-        // When initialized by the container, register the event type to be received with the eventmanager.
-        EventManager.get().regist(this.getGenericClass(), this);
-        // Determine whether to process asynchronously during container initialization.
-        this.async = getClass().getAnnotation(Async.class) != null;
-    }
-
-    protected void regist(Router router) {
-        this.router = router;
+    protected Router registRouter() {
+        return DefaultRouter.get();
     }
 
     /**

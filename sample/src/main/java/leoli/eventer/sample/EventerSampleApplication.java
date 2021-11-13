@@ -6,7 +6,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 /**
  * Application Starter
  *
- * @author leoli
+ * @author LiYinan
  * @date 2020/2/26
  */
 @SpringBootApplication(scanBasePackages = {"leoli.eventer.sample"})

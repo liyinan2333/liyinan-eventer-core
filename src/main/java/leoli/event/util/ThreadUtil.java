@@ -3,7 +3,7 @@ package leoli.event.util;
 import java.util.concurrent.*;
 
 /**
- * @author leoli
+ * @author LiYinan
  * @date 2021/09/21
  */
 public class ThreadUtil {

@@ -2,6 +2,7 @@ package leoli.eventer.sample.handler;
 
 import leoli.event.anno.Async;
 import leoli.event.spi.EventHandler;
+import leoli.event.spi.Router;
 import leoli.eventer.sample.bean.SayEvent;
 import leoli.eventer.sample.router.SayEventNameRouter;
 import org.slf4j.Logger;
@@ -14,7 +15,7 @@ import javax.annotation.PostConstruct;
 /**
  * Handle {@link SayEvent} from LeoLi.
  *
- * @author leoli
+ * @author LiYinan
  * @date 2020/2/26
  */
 @Async
@@ -26,9 +27,9 @@ public class SayEventLeoliHandler extends EventHandler<SayEvent> {
     @Autowired
     SayEventNameRouter router;
 
-    @PostConstruct
-    public void init() {
-        super.regist(router);
+    @Override
+    protected Router registRouter() {
+        return router;
     }
 
     @Override
