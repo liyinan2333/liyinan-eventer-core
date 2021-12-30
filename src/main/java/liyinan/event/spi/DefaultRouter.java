@@ -1,4 +1,4 @@
-package leoli.event.spi;
+package liyinan.event.spi;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

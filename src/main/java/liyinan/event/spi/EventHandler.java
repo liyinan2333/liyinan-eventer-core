@@ -1,9 +1,7 @@
-package leoli.event.spi;
+package liyinan.event.spi;
 
-import leoli.event.anno.Async;
-import leoli.event.exception.MethodNotImplException;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import liyinan.event.anno.Async;
+import liyinan.event.exception.MethodNotImplException;
 
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;

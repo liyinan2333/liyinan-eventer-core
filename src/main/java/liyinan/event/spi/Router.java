@@ -1,4 +1,4 @@
-package leoli.event.spi;
+package liyinan.event.spi;
 
 public interface Router<T> {
 

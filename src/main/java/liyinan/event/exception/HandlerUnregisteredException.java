@@ -1,4 +1,4 @@
-package leoli.event.exception;
+package liyinan.event.exception;
 
 /**
  * @author LiYinan

@@ -1,10 +1,10 @@
-package leoli.event.spi;
+package liyinan.event.spi;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import leoli.event.exception.HandlerUnregisteredException;
-import leoli.event.exception.MultipleRequestHandlersException;
-import leoli.event.util.JsonUtil;
-import leoli.event.util.ThreadUtil;
+import liyinan.event.exception.HandlerUnregisteredException;
+import liyinan.event.exception.MultipleRequestHandlersException;
+import liyinan.event.util.JsonUtil;
+import liyinan.event.util.ThreadUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

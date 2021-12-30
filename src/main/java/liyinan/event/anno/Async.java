@@ -1,4 +1,4 @@
-package leoli.event.anno;
+package liyinan.event.anno;
 
 import java.lang.annotation.*;
 
