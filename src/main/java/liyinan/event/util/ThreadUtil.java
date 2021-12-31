@@ -9,7 +9,7 @@ import java.util.concurrent.*;
 public class ThreadUtil {
 
     /**
-     * Solve the memory overflow problem of {@link Executors}
+     * Solve the memory overflow problem of {@link Executors}.
      *
      * @param corePoolSize
      * @param maximumPoolSize

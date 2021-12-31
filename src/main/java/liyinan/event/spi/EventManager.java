@@ -15,7 +15,7 @@ import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
 /**
- * Event Manager
+ * Event Manager.
  *
  * @author LiYinan
  * @date 2020/2/26
@@ -23,7 +23,7 @@ import java.util.stream.Collectors;
 public class EventManager {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(EventManager.class);
-    private static EventManager instance = new EventManager();
+    private static EventManager INSTANCE = new EventManager();
 
     private ExecutorService executor = ThreadUtil.newFixedThreadPool(2 << 2, 2 << 3,
             0L, TimeUnit.MILLISECONDS, new LinkedBlockingQueue<Runnable>(1000));
@@ -37,20 +37,15 @@ public class EventManager {
     }
 
     public static EventManager get() {
-        return instance;
+        return INSTANCE;
     }
 
     /**
-     * Publish event
+     * Publish event.
      *
      * @param event
      */
     public void publish(Object event) {
-        try {
-            LOGGER.info("Received publish event: [{}]", JsonUtil.toJson(event));
-        } catch (JsonProcessingException e) {
-            LOGGER.warn("Received publish event: [" + event.toString() + "], but an exception occurred during serialization.", e);
-        }
         this.dispatch(event);
     }
 
@@ -61,32 +56,8 @@ public class EventManager {
      * @return
      */
     public Object request(Object event) {
-        try {
-            LOGGER.info("Received request event: [{}]", JsonUtil.toJson(event));
-        } catch (JsonProcessingException e) {
-            LOGGER.warn("Received request event: [" + event.toString() + "], but an exception occurred during serialization.", e);
-        }
         Object response = this.dispatchRequest(event);
-        try {
-            LOGGER.info("Received response event: [{}]", JsonUtil.toJson(response));
-        } catch (JsonProcessingException e) {
-            LOGGER.warn("Received response event: [" + event.toString() + "], but an exception occurred during serialization.", e);
-        }
         return response;
-    }
-
-    /**
-     * Asynchronous request event.
-     *
-     * @param event
-     */
-    public void asyncRequest(Object event) {
-        try {
-            LOGGER.info("Received asynchronous request event: [{}]", JsonUtil.toJson(event));
-        } catch (JsonProcessingException e) {
-            LOGGER.warn("Received asynchronous request event: [" + event.toString() + "], but an exception occurred during serialization.", e);
-        }
-        this.dispatchAsyncRequest(event);
     }
 
     /**
@@ -106,62 +77,77 @@ public class EventManager {
     }
 
     /**
-     * Event routing and handler
+     * Event routing and handler.
      *
      * @param event
      */
     private void dispatch(Object event) {
+        this.log("Received publish event: [{}]", event);
         List<EventHandler> handlers = this.route(event);
         handlers.forEach(handler -> {
             if (handler.isAsync()) {
-                // Asynchronous processing
+                // Asynchronous processing.
                 executor.submit(() -> {
                     handler.handle(event);
                 });
             } else {
+                // Synchronous processing.
                 handler.handle(event);
             }
         });
     }
 
     /**
-     * Request event routing and handler
+     * Asynchronous response routing and handler.
+     *
+     * @param response
+     */
+    private void dispatchAsyncResponse(Object response) {
+        this.log("Received Asynchronous response event: [{}]", response);
+        List<EventHandler> handlers = this.route(response);
+        handlers.forEach(handler -> {
+            if (handler.isAsync()) {
+                // Asynchronous processing.
+                executor.submit(() -> {
+                    handler.handle(response);
+                });
+            } else {
+                // Synchronous processing.
+                handler.handle(response);
+            }
+        });
+    }
+
+    /**
+     * Request event routing and handler.
      *
      * @param event
      * @return
      */
     private Object dispatchRequest(Object event) {
+        this.log("Received request event: [{}]", event);
         List<EventHandler> handlers = this.route(event);
         if (handlers.size() > 1) {
             throw new MultipleRequestHandlersException();
         }
-        return handlers.get(0).handleRequest(event);
-    }
-
-    /**
-     * Asynchronous request event routing and handler
-     *
-     * @param event
-     * @return
-     */
-    private void dispatchAsyncRequest(Object event) {
-        List<EventHandler> handlers = this.route(event);
-        if (handlers.size() > 1) {
-            throw new MultipleRequestHandlersException();
+        // Asynchronous handler.
+        EventHandler handler = handlers.get(0);
+        if (handler.isAsync()) {
+            executor.submit(() -> {
+                Object response = handler.handleRequest(event);
+                this.dispatchAsyncResponse(response);
+            });
+            return null;
+        } else {
+            // Synchronous handler.
+            Object response = handler.handleRequest(event);
+            this.log("Received response event: [{}]", response);
+            return response;
         }
-        executor.submit(() -> {
-            Object response = handlers.get(0).handleRequest(event);
-            try {
-                LOGGER.info("Received asynchronous response event: [{}]", JsonUtil.toJson(response));
-            } catch (JsonProcessingException e) {
-                LOGGER.warn("Received asynchronous response event: [" + response.toString() + "], but an exception occurred during serialization.", e);
-            }
-            this.dispatch(response);
-        });
     }
 
     /**
-     * Find handlers according to class type and router
+     * Find handlers according to class type and router.
      *
      * @param event
      * @return
@@ -174,7 +160,9 @@ public class EventManager {
         List<EventHandler> handlers = classTypeHandlers.stream().filter((handler) -> {
             // The router judges the match before processing.
             if (handler.getRouter().route(event)) {
-                LOGGER.info("Event route: [event={}, handler={}]", event.getClass().getName(), handler.getClass().getName());
+                if (LOGGER.isDebugEnabled()) {
+                    LOGGER.debug("Event route: [event={}, handler={}]", event.getClass().getName(), handler.getClass().getName());
+                }
                 return true;
             }
             return false;
@@ -183,5 +171,18 @@ public class EventManager {
             throw new HandlerUnregisteredException();
         }
         return handlers;
+    }
+
+    private void log(String msg, Object event) {
+        try {
+            if (LOGGER.isDebugEnabled()) {
+                LOGGER.debug(msg, JsonUtil.toJson(event));
+            }
+        } catch (JsonProcessingException e) {
+            if (LOGGER.isWarnEnabled()) {
+                LOGGER.warn(msg + ", but an exception occurred during serialization.", event.toString());
+                LOGGER.warn(e.getMessage(), e);
+            }
+        }
     }
 }

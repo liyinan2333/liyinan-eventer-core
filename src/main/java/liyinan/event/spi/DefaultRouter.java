@@ -26,7 +26,9 @@ public class DefaultRouter implements Router {
      */
     @Override
     public boolean route(Object event) {
-        LOGGER.info("Default router matched.");
+        if (LOGGER.isDebugEnabled()) {
+            LOGGER.info("Default router matched.");
+        }
         return true;
     }
 }
