@@ -3,9 +3,12 @@
 一种进程内部组件间消息通信的解决方案。
 
 * 支持异步处理；
+
 * 支持发布-订阅模式、请求响应模式；
 
 * 支持将任意对象作为消息容器，无需实现接口或继承父类；
+
+使用示例参考[liyinan2333/liyinan-eventer-sample: The sample for liyinan-eventer-core (github.com)](https://github.com/liyinan2333/liyinan-eventer-sample)
 
 ### 发布-订阅
 
