@@ -10,6 +10,16 @@
 
 使用示例参考[liyinan2333/liyinan-eventer-sample: The sample for liyinan-eventer-core (github.com)](https://github.com/liyinan2333/liyinan-eventer-sample)
 
+maven仓库坐标：
+
+```xml
+<dependency>
+    <groupId>io.github.liyinan2333</groupId>
+    <artifactId>liyinan-eventer-core</artifactId>
+    <version>2.0.0-RELEASE</version>
+</dependency>
+```
+
 ### 发布-订阅
 
 发布-订阅模式无返回值，支持一次发布，多个Handler处理。
