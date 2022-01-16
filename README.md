@@ -8,7 +8,7 @@
 
 * 支持将任意对象作为消息体，无需实现接口或继承父类；
 
-使用示例参考[liyinan2333/liyinan-eventer-sample: The sample for liyinan-eventer-core (github.com)](https://github.com/liyinan2333/liyinan-eventer-sample)
+使用示例参考[liyinan-eventer-sample](https://github.com/liyinan2333/liyinan-eventer-sample)
 
 maven仓库坐标：
 
